@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OGN 起源卡牌价格</title>
+  <title>riftbound 중국어 카드 가격</title>
   <style>
     :root {
       color-scheme: light;
@@ -51,20 +51,78 @@
       font-size: 14px;
     }
 
-    .total {
+    .header-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       flex: 0 0 auto;
-      padding: 10px 14px;
+    }
+
+    .compare-toggle,
+    .lang-toggle,
+    .total {
+      height: 40px;
+      padding: 0 14px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.78);
       color: var(--muted);
+      font: inherit;
       font-size: 14px;
       white-space: nowrap;
+    }
+
+    .compare-toggle,
+    .lang-toggle {
+      cursor: pointer;
+      color: var(--ink);
+      font-weight: 750;
+    }
+
+    .compare-toggle[aria-pressed="true"],
+    .lang-toggle[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: #e0f2ef;
+      color: var(--accent);
+    }
+
+    .total {
+      display: grid;
+      place-items: center;
     }
 
     main {
       width: min(1220px, calc(100% - 32px));
       margin: 22px auto 44px;
+    }
+
+    .rule-banner {
+      width: min(1220px, calc(100% - 32px));
+      margin: 16px auto 0;
+      padding: 14px 16px;
+      display: grid;
+      gap: 6px;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      background: #ecfdf5;
+      color: #064e3b;
+    }
+
+    .rule-banner a {
+      color: #047857;
+      font-size: 13px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .rule-banner a:hover {
+      text-decoration: underline;
+    }
+
+    .rule-banner p {
+      margin: 0;
+      font-size: 14px;
+      color: #115e59;
     }
 
     .catalog {
@@ -128,7 +186,7 @@
       border-top: 1px solid var(--line);
       color: var(--price);
       font-weight: 850;
-      font-size: 22px;
+      font-size: 20px;
       letter-spacing: 0;
     }
 
@@ -136,6 +194,40 @@
       color: var(--muted);
       font-size: 12px;
       font-weight: 700;
+    }
+
+    .compare {
+      display: grid;
+      gap: 5px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .compare-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .compare-row strong {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .compare-row .higher { color: #b42318; }
+    .compare-row .lower { color: #067647; }
+    .compare-row .same { color: var(--muted); }
+
+    .rnd-name {
+      min-height: 18px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .empty-image {
@@ -155,9 +247,14 @@
         flex-direction: column;
       }
 
-      .total {
+      .header-tools {
         width: 100%;
-        text-align: center;
+      }
+
+      .compare-toggle,
+      .lang-toggle,
+      .total {
+        flex: 1 1 0;
       }
 
       .catalog {
@@ -179,92 +276,212 @@
 <body>
   <header>
     <div>
-      <h1>OGN 起源卡牌价格</h1>
-      <p class="count">按价格从高到低排列</p>
+      <h1 id="pageTitle">riftbound 중국어 카드 가격</h1>
+      <p class="count" id="subtitle">전체 가격 비교 표시 · 환율 206</p>
     </div>
-    <div class="total">52 张卡</div>
+    <div class="header-tools">
+      <button class="compare-toggle" id="compareToggle" type="button" aria-pressed="false">가격 차이순</button>
+      <button class="lang-toggle" id="langToggle" type="button" aria-pressed="false">English</button>
+      <div class="total" id="totalCount">60장</div>
+    </div>
   </header>
 
+  <aside class="rule-banner">
+    <a id="ruleLink" href="https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/" target="_blank" rel="noreferrer">공식 규칙 420 보기</a>
+    <p id="ruleText">규칙 420에 따라 공식 Riftbound 카드는 언어와 상관없이 덱에 함께 사용할 수 있습니다. 한국어 카드와 중국어 카드를 섞어 쓰고, 더 저렴한 중국어 카드를 고를 수 있어요.</p>
+  </aside>
+
   <main>
-    <section class="catalog" id="catalog" aria-label="OGN 起源卡牌"></section>
+    <section class="catalog" id="catalog" aria-label="OGN 오리진 카드"></section>
   </main>
 
   <script>
     const cards = [
-      { name: "九尾妖狐", number: "OGN.303*/298", price: 12996, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/365-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "虚空之女", number: "OGN.299*/298", price: 7818, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/359-sc-1764067099.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "赏金猎人", number: "OGN.309*/298", price: 7195, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/375-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "盲僧", number: "OGN.304*/298", price: 6472, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/367-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "迅捷斥候", number: "OGN.307*/298", price: 5674, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/371-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "暴走萝莉", number: "OGN.301*/298", price: 4118, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/361-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "曙光女神", number: "OGN.306*/298", price: 3600, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/369-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "诺克萨斯之手", number: "OGN.302*/298", price: 3588, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/363-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "疾风剑豪", number: "OGN.305*/298", price: 3392, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/83-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "奥术先驱", number: "OGN.308*/298", price: 3347, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/373-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "不灭狂雷", number: "OGN.300*/298", price: 3116, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/79-sc-1764067098.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "腕豪", number: "OGN.310*/298", price: 2040, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/377-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "九尾妖狐", number: "OGN.303/298", price: 1089, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/364-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "虚空之女", number: "OGN.299/298", price: 537, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/358-sc-1764067099.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "卡莎, 九死一生", number: "OGN.039/298", price: 290, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/320-sc-1764067023.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "奥术先驱", number: "OGN.308/298", price: 280, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/372-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "时间扭曲", number: "OGN.122/298", price: 273, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/307-sc-1764067053.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "闪耀极光", number: "OGN.160/298", price: 223, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/254-sc-1764067063.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "盲僧", number: "OGN.304/298", price: 217, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/366-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "暴走萝莉", number: "OGN.301/298", price: 216, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/360-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "赏金猎人", number: "OGN.309/298", price: 215, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/374-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "不和之印", number: "OGN.204/298", price: 191, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/133-sc-1764067072.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "诺克萨斯之手", number: "OGN.302/298", price: 176, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/362-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "迅捷斥候", number: "OGN.307/298", price: 170, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/370-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "疾风剑豪", number: "OGN.305/298", price: 168, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/81-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "曙光女神", number: "OGN.306/298", price: 155, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/368-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "海兽钓钩", number: "OGN.242/298", price: 141, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/357-sc-1764067085.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "腕豪", number: "OGN.310/298", price: 121, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/376-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "不灭狂雷", number: "OGN.300/298", price: 119, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/77-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "团结之印", number: "OGN.245/298", price: 114, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/14-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "过载能量", number: "OGN.123/298", price: 100, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/98-sc-1764067053.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "反转时间线", number: "OGN.201/298", price: 88, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/170-sc-1764067074.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "灵光符文", number: "OGN.089a/298", price: 79, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/87-sc-1764067041.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "专注之印", number: "OGN.081/298", price: 75, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/84-sc-1764067038.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "苍炎守护者", number: "OGN.082/298", price: 74, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/85-sc-1764067037.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "翠意符文", number: "OGN.042a/298", price: 73, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/48-sc-1764067023.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "混沌符文", number: "OGN.166a/298", price: 71, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/116-sc-1764067066.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "暴怒之印", number: "OGN.040/298", price: 69, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/40-sc-1764067022.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "序理符文", number: "OGN.214a/298", price: 62, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/139-sc-1764067076.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "洞察之印", number: "OGN.120/298", price: 60, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/97-sc-1764067054.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "炽烈符文", number: "OGN.007a/298", price: 56, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/15-sc-1764067002.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "摧破符文", number: "OGN.126a/298", price: 54, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/100-sc-1764067055.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "亡花掠食者", number: "OGN.161/298", price: 51, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/110-sc-1764067063.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "力量之印", number: "OGN.163/298", price: 42, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/113-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "瑟提, 铁拳", number: "OGN.164a/298", price: 39, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/272-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "德莱厄斯, 崔法利", number: "OGN.027a/298", price: 31, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/28-sc-1764067005.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "瑟提, 铁拳", number: "OGN.164/298", price: 30, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/271-sc-1764067065.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "圣裁之刻", number: "OGN.244/298", price: 23, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/270-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "厄运小姐, 船长", number: "OGN.162a/298", price: 23, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/112-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "叹为观止", number: "OGN.270/298", price: 20, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/67-sc-1764067090.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "艾卡西亚暴雨", number: "OGN.248/298", price: 18, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/23-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
-      { name: "弹幕时间", number: "OGN.268/298", price: 9, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/63-sc-1764067089.jpg~tplv-2yt7131h9y-compress.image" }
+      { nameKo: "구미호", nameEn: "Ahri, Nine-Tailed Fox (Signature)", number: "OGN.303*/298", price: 2677176, rndPrice: 6000000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/365-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "공허의 딸", nameEn: "Kai'Sa, Daughter of the Void (Signature)", number: "OGN.299*/298", price: 1610508, rndPrice: 4800000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/359-sc-1764067099.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "현상금 사냥꾼", nameEn: "Miss Fortune, Bounty Hunter (Signature)", number: "OGN.309*/298", price: 1482170, rndPrice: 2400000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/375-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "눈먼 수도승", nameEn: "Lee Sin, Blind Monk (Signature)", number: "OGN.304*/298", price: 1333232, rndPrice: 2160000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/367-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "날쌘 정찰병", nameEn: "Teemo, Swift Scout (Signature)", number: "OGN.307*/298", price: 1168844, rndPrice: 2400000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/371-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "난폭한 말괄량이", nameEn: "Jinx, Loose Cannon (Signature)", number: "OGN.301*/298", price: 848308, rndPrice: 2400000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/361-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "여명의 빛", nameEn: "Leona, Radiant Dawn (Signature)", number: "OGN.306*/298", price: 741600, rndPrice: 1320000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/369-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "녹서스의 실력자", nameEn: "Darius, Hand of Noxus (Signature)", number: "OGN.302*/298", price: 739128, rndPrice: 900000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/363-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "용서받지 못한 자", nameEn: "Yasuo, Unforgiven (Signature)", number: "OGN.305*/298", price: 698752, rndPrice: 1200000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/83-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "아케인의 전령관", nameEn: "Viktor, Herald of the Arcane (Signature)", number: "OGN.308*/298", price: 689482, rndPrice: 1200000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/373-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "무자비한 폭풍", nameEn: "Volibear, Relentless Storm (Signature)", number: "OGN.300*/298", price: 641896, rndPrice: 1080000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/79-sc-1764067098.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "우두머리", nameEn: "Sett, The Boss (Signature)", number: "OGN.310*/298", price: 420240, rndPrice: 1020000, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/377-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "구미호", nameEn: "Ahri, Nine-Tailed Fox (Overnumbered)", number: "OGN.303/298", price: 224334, rndPrice: 450000, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/364-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "공허의 딸", nameEn: "Kai'Sa, Daughter of the Void (Overnumbered)", number: "OGN.299/298", price: 110622, rndPrice: 360000, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/358-sc-1764067099.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "카이사 생존자", nameEn: "Kai'Sa, Survivor (Alternate Art)", number: "OGN.039a/298", price: 60564, rndPrice: 102000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/323-sc-1764067022.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "카이사 생존자", nameEn: "Kai'Sa, Survivor", number: "OGN.039/298", price: 59740, rndPrice: 90000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/320-sc-1764067023.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "아케인의 전령관", nameEn: "Viktor, Herald of the Arcane (Overnumbered)", number: "OGN.308/298", price: 57680, rndPrice: 144000, rndStock: 3, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/372-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "시간 왜곡", nameEn: "Time Warp", number: "OGN.122/298", price: 56238, rndPrice: 78000, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/307-sc-1764067053.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "눈부신 오로라", nameEn: "Dazzling Aurora", number: "OGN.160/298", price: 45938, rndPrice: 54000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/254-sc-1764067063.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "눈먼 수도승", nameEn: "Lee Sin, Blind Monk (Overnumbered)", number: "OGN.304/298", price: 44702, rndPrice: 192000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/366-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "난폭한 말괄량이", nameEn: "Jinx, Loose Cannon (Overnumbered)", number: "OGN.301/298", price: 44496, rndPrice: 180000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/360-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "현상금 사냥꾼", nameEn: "Miss Fortune, Bounty Hunter (Overnumbered)", number: "OGN.309/298", price: 44290, rndPrice: 228000, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/374-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "불화의 문장", nameEn: "Seal of Discord", number: "OGN.204/298", price: 39346, rndPrice: 60000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/133-sc-1764067072.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "녹서스의 실력자", nameEn: "Darius, Hand of Noxus (Overnumbered)", number: "OGN.302/298", price: 36256, rndPrice: 90000, rndStock: 3, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/362-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "날쌘 정찰병", nameEn: "Teemo, Swift Scout (Overnumbered)", number: "OGN.307/298", price: 35020, rndPrice: 210000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/370-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "용서받지 못한 자", nameEn: "Yasuo, Unforgiven (Overnumbered)", number: "OGN.305/298", price: 34608, rndPrice: 114000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/81-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "여명의 빛", nameEn: "Leona, Radiant Dawn (Overnumbered)", number: "OGN.306/298", price: 31930, rndPrice: 108000, rndStock: 2, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/368-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "미끼 갈고리", nameEn: "Baited Hook", number: "OGN.242/298", price: 29046, rndPrice: 60000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/357-sc-1764067085.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "우두머리", nameEn: "Sett, The Boss (Overnumbered)", number: "OGN.310/298", price: 24926, rndPrice: 120000, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/376-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "무자비한 폭풍", nameEn: "Volibear, Relentless Storm (Overnumbered)", number: "OGN.300/298", price: 24514, rndPrice: 90000, rndStock: 3, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/77-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "단합의 문장", nameEn: "Seal of Unity", number: "OGN.245/298", price: 23484, rndPrice: 21600, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/14-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "통제되지 않은 힘", nameEn: "Unchecked Power", number: "OGN.123/298", price: 20600, rndPrice: 39600, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/98-sc-1764067053.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "시간선 뒤집기", nameEn: "Invert Timelines", number: "OGN.201/298", price: 18128, rndPrice: 30000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/170-sc-1764067074.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "정신 룬", nameEn: "Mind Rune", number: "OGN.089a/298", price: 16274, rndPrice: 8400, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/87-sc-1764067041.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "집중의 문장", nameEn: "Seal of Focus", number: "OGN.081/298", price: 15450, rndPrice: 36000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/84-sc-1764067038.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "하얀불꽃 수호자", nameEn: "Whiteflame Protector", number: "OGN.082/298", price: 15244, rndPrice: 5400, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/85-sc-1764067037.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "평정 룬", nameEn: "Calm Rune", number: "OGN.042a/298", price: 15038, rndPrice: 8400, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/48-sc-1764067023.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "혼돈 룬", nameEn: "Chaos Rune", number: "OGN.166a/298", price: 14626, rndPrice: 9600, rndStock: 6, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/116-sc-1764067066.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "꼬리 천 개 주시자", nameEn: "Thousand-Tailed Watcher", number: "OGN.116/298", price: 14420, rndPrice: 36000, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/305-sc-1764067052.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "분노의 문장", nameEn: "Seal of Rage", number: "OGN.040/298", price: 14214, rndPrice: 21600, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/40-sc-1764067022.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "질서 룬", nameEn: "Order Rune", number: "OGN.214a/298", price: 12772, rndPrice: 7200, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/139-sc-1764067076.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "통찰의 문장", nameEn: "Seal of Insight", number: "OGN.120/298", price: 12360, rndPrice: 18000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/97-sc-1764067054.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "분노 룬", nameEn: "Fury Rune", number: "OGN.007a/298", price: 11536, rndPrice: 5400, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/15-sc-1764067002.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "신체 룬", nameEn: "Body Rune", number: "OGN.126a/298", price: 11124, rndPrice: 5400, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/100-sc-1764067055.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "죽음꽃 포식자", nameEn: "Deadbloom Predator", number: "OGN.161/298", price: 10506, rndPrice: 6000, rndStock: 0, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/110-sc-1764067063.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "힘의 문장", nameEn: "Seal of Strength", number: "OGN.163/298", price: 8652, rndPrice: 18000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/113-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "세트 싸움꾼", nameEn: "Sett, Brawler (Alternate Art)", number: "OGN.164a/298", price: 8034, rndPrice: 12000, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/272-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "유성", nameEn: "Falling Star", number: "OGN.029/298", price: 6592, rndPrice: 24000, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/261-sc-1764067017.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "파도전환자", nameEn: "Tideturner", number: "OGN.199/298", price: 6592, rndPrice: 4200, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/344-sc-1764067074.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "다리우스 트리파르", nameEn: "Darius, Trifarian", number: "OGN.027a/298", price: 6386, rndPrice: 10800, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/28-sc-1764067005.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "파괴 공작", nameEn: "Sabotage", number: "OGN.156/298", price: 6386, rndPrice: 24000, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/321-sc-1764067060.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "세트 싸움꾼", nameEn: "Sett, Brawler", number: "OGN.164/298", price: 6180, rndPrice: 9600, rndStock: 2, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/271-sc-1764067065.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "미스 포츈 선장", nameEn: "Miss Fortune, Captain (Alternate Art)", number: "OGN.162a/298", price: 4738, rndPrice: 21600, rndStock: 3, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/112-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "신성한 심판", nameEn: "Divine Judgment", number: "OGN.244/298", price: 4738, rndPrice: 14400, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/270-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "대미 장식", nameEn: "Showstopper", number: "OGN.270/298", price: 4120, rndPrice: 10800, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/67-sc-1764067090.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "이케시아 폭우", nameEn: "Icathian Rain", number: "OGN.248/298", price: 3708, rndPrice: 4800, rndStock: 1, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/23-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "브린히르 썬더송", nameEn: "Brynhir Thundersong", number: "OGN.026/298", price: 2266, rndPrice: 4800, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/312-sc-1764067006.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "다리우스 트리파르", nameEn: "Darius, Trifarian", number: "OGN.027/298", price: 2060, rndPrice: 3600, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/26-sc-1764067004.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "정신 분쇄자", nameEn: "Mindsplitter", number: "OGN.192/298", price: 1854, rndPrice: 2400, rndStock: 8, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/278-sc-1764067071.jpg~tplv-2yt7131h9y-compress.image" },
+      { nameKo: "쌍권총 난사", nameEn: "Bullet Time", number: "OGN.268/298", price: 1854, rndPrice: 7200, rndStock: 4, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/63-sc-1764067089.jpg~tplv-2yt7131h9y-compress.image" },
     ];
 
-    const formatter = new Intl.NumberFormat("zh-CN", {
+    const copy = {
+      ko: {
+        subtitle: "전체 가격 비교 표시 · 환율 206",
+        sortByGap: "가격 차이순",
+        sortByPrice: "가격순 복원",
+        language: "English",
+        total: `${cards.length}장`,
+        price: "가격",
+        rnd: "RND",
+        gap: "차액",
+        stock: "재고",
+        unmatched: "미매칭",
+        same: "동일",
+        higher: "높음",
+        lower: "낮음",
+        ruleLink: "공식 규칙 420 보기",
+        ruleText: "규칙 420에 따라 공식 Riftbound 카드는 언어와 상관없이 덱에 함께 사용할 수 있습니다. 한국어 카드와 중국어 카드를 섞어 쓰고, 더 저렴한 중국어 카드를 고를 수 있어요.",
+        pageTitle: "riftbound 중국어 카드 가격"
+      },
+      en: {
+        subtitle: "Showing all comparisons · rate 206",
+        sortByGap: "Sort by gap",
+        sortByPrice: "Restore price sort",
+        language: "한국어",
+        total: `${cards.length} cards`,
+        price: "Price",
+        rnd: "RND",
+        gap: "Gap",
+        stock: "stock",
+        unmatched: "No match",
+        same: "Even",
+        higher: "Higher",
+        lower: "Lower",
+        ruleLink: "View official Rule 420",
+        ruleText: "Rule 420 lets official Riftbound cards of any language be used together in decks. You can mix Korean and Chinese cards, then choose lower-priced Chinese copies.",
+        pageTitle: "riftbound Chinese card prices"
+      }
+    };
+
+    const formatter = new Intl.NumberFormat("ko-KR", {
       maximumFractionDigits: 0
     });
 
     const catalog = document.querySelector("#catalog");
+    const compareToggle = document.querySelector("#compareToggle");
+    const langToggle = document.querySelector("#langToggle");
+    const subtitle = document.querySelector("#subtitle");
+    const totalCount = document.querySelector("#totalCount");
+    const ruleLink = document.querySelector("#ruleLink");
+    const ruleText = document.querySelector("#ruleText");
+    const pageTitle = document.querySelector("#pageTitle");
+    let sortByGap = false;
+    let language = "ko";
 
-    catalog.innerHTML = cards.map((card) => `
+    const t = (key) => copy[language][key];
+    const cardName = (card) => language === "ko" ? card.nameKo : card.nameEn;
+    const formatWon = (value) => value == null ? t("unmatched") : `₩${formatter.format(value)}`;
+    const getGap = (card) => card.rndPrice == null ? null : card.price - card.rndPrice;
+    const formatGap = (gap) => {
+      if (gap == null) return t("unmatched");
+      if (gap === 0) return t("same");
+      return `${gap > 0 ? t("higher") : t("lower")} ${formatWon(Math.abs(gap))}`;
+    };
+    const gapClass = (gap) => gap == null || gap === 0 ? "same" : gap > 0 ? "higher" : "lower";
+
+    const syncChrome = () => {
+      document.documentElement.lang = language;
+      subtitle.textContent = t("subtitle");
+      totalCount.textContent = t("total");
+      compareToggle.textContent = sortByGap ? t("sortByPrice") : t("sortByGap");
+      langToggle.textContent = t("language");
+      langToggle.setAttribute("aria-pressed", String(language === "en"));
+      ruleLink.textContent = t("ruleLink");
+      ruleText.textContent = t("ruleText");
+      pageTitle.textContent = t("pageTitle");
+      document.title = t("pageTitle");
+    };
+
+    const render = () => {
+      syncChrome();
+      const visibleCards = [...cards].sort((a, b) => {
+        if (!sortByGap) return b.price - a.price;
+        return Math.abs(getGap(b) || 0) - Math.abs(getGap(a) || 0);
+      });
+
+      catalog.innerHTML = visibleCards.map((card) => {
+        const gap = getGap(card);
+        const name = cardName(card);
+        const rndMeta = card.rndPrice == null ? t("unmatched") : `${name} · ${t("stock")} ${card.rndStock}`;
+
+        return `
       <article class="card">
         <div class="image-wrap">
           ${card.image
-            ? `<img src="${card.image}" alt="${card.name} ${card.number}" loading="lazy" referrerpolicy="no-referrer" />`
-            : `<div class="empty-image">暂无卡图</div>`}
+            ? `<img src="${card.image}" alt="${name} ${card.number}" loading="lazy" referrerpolicy="no-referrer" />`
+            : `<div class="empty-image">이미지 없음</div>`}
         </div>
         <div class="info">
-          <h2 class="name">${card.name}</h2>
+          <h2 class="name">${name}</h2>
           <div class="number">${card.number}</div>
-          <div class="price"><span>价格</span>¥${formatter.format(card.price)}</div>
+          <div class="price"><span>${t("price")}</span>${formatWon(card.price)}</div>
+          <div class="compare">
+            <div class="compare-row"><span>${t("rnd")}</span><strong>${formatWon(card.rndPrice)}</strong></div>
+            <div class="compare-row"><span>${t("gap")}</span><strong class="${gapClass(gap)}">${formatGap(gap)}</strong></div>
+            <div class="rnd-name">${rndMeta}</div>
+          </div>
         </div>
-      </article>
-    `).join("");
+      </article>`;
+      }).join("");
+    };
+
+    compareToggle.addEventListener("click", () => {
+      sortByGap = !sortByGap;
+      compareToggle.setAttribute("aria-pressed", String(sortByGap));
+      render();
+    });
+
+    langToggle.addEventListener("click", () => {
+      language = language === "ko" ? "en" : "ko";
+      render();
+    });
+
+    render();
   </script>
 </body>
 </html>
