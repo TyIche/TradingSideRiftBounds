@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OGN 起源卡牌价格</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f5f8;
+      --ink: #151922;
+      --muted: #697386;
+      --card: #ffffff;
+      --line: #d8dee8;
+      --accent: #0f766e;
+      --price: #9a3412;
+      --shadow: 0 12px 30px rgba(21, 25, 34, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #eaf0f5 0, var(--bg) 280px), var(--bg);
+      line-height: 1.45;
+    }
+
+    header {
+      width: min(1220px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 20px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 42px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .count {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .total {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    main {
+      width: min(1220px, calc(100% - 32px));
+      margin: 22px auto 44px;
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .image-wrap {
+      position: relative;
+      aspect-ratio: 63 / 88;
+      background: #dfe6ef;
+      overflow: hidden;
+    }
+
+    .image-wrap img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 12px 12px 13px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .name {
+      min-height: 42px;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.3;
+      letter-spacing: 0;
+      word-break: break-word;
+    }
+
+    .number {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .price {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      color: var(--price);
+      font-weight: 850;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .price span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty-image {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    @media (max-width: 620px) {
+      header {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .total {
+        width: 100%;
+        text-align: center;
+      }
+
+      .catalog {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .name {
+        min-height: 38px;
+        font-size: 14px;
+      }
+
+      .price {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>OGN 起源卡牌价格</h1>
+      <p class="count">按价格从高到低排列</p>
+    </div>
+    <div class="total">52 张卡</div>
+  </header>
+
+  <main>
+    <section class="catalog" id="catalog" aria-label="OGN 起源卡牌"></section>
+  </main>
+
+  <script>
+    const cards = [
+      { name: "九尾妖狐", number: "OGN.303*/298", price: 12996, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/365-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "虚空之女", number: "OGN.299*/298", price: 7818, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/359-sc-1764067099.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "赏金猎人", number: "OGN.309*/298", price: 7195, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/375-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "盲僧", number: "OGN.304*/298", price: 6472, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/367-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "迅捷斥候", number: "OGN.307*/298", price: 5674, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/371-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "暴走萝莉", number: "OGN.301*/298", price: 4118, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/361-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "曙光女神", number: "OGN.306*/298", price: 3600, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/369-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "诺克萨斯之手", number: "OGN.302*/298", price: 3588, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/363-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "疾风剑豪", number: "OGN.305*/298", price: 3392, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/83-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "奥术先驱", number: "OGN.308*/298", price: 3347, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/373-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "不灭狂雷", number: "OGN.300*/298", price: 3116, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/79-sc-1764067098.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "腕豪", number: "OGN.310*/298", price: 2040, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/377-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "九尾妖狐", number: "OGN.303/298", price: 1089, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/364-sc-1764067102.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "虚空之女", number: "OGN.299/298", price: 537, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/358-sc-1764067099.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "卡莎, 九死一生", number: "OGN.039/298", price: 290, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/320-sc-1764067023.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "奥术先驱", number: "OGN.308/298", price: 280, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/372-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "时间扭曲", number: "OGN.122/298", price: 273, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/307-sc-1764067053.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "闪耀极光", number: "OGN.160/298", price: 223, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/254-sc-1764067063.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "盲僧", number: "OGN.304/298", price: 217, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/366-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "暴走萝莉", number: "OGN.301/298", price: 216, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/360-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "赏金猎人", number: "OGN.309/298", price: 215, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/374-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "不和之印", number: "OGN.204/298", price: 191, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/133-sc-1764067072.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "诺克萨斯之手", number: "OGN.302/298", price: 176, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/362-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "迅捷斥候", number: "OGN.307/298", price: 170, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/370-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "疾风剑豪", number: "OGN.305/298", price: 168, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/81-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "曙光女神", number: "OGN.306/298", price: 155, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/368-sc-1764067101.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "海兽钓钩", number: "OGN.242/298", price: 141, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/357-sc-1764067085.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "腕豪", number: "OGN.310/298", price: 121, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/376-sc-1764067103.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "不灭狂雷", number: "OGN.300/298", price: 119, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/77-sc-1764067100.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "团结之印", number: "OGN.245/298", price: 114, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/14-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "过载能量", number: "OGN.123/298", price: 100, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/98-sc-1764067053.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "反转时间线", number: "OGN.201/298", price: 88, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/170-sc-1764067074.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "灵光符文", number: "OGN.089a/298", price: 79, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/87-sc-1764067041.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "专注之印", number: "OGN.081/298", price: 75, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/84-sc-1764067038.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "苍炎守护者", number: "OGN.082/298", price: 74, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/85-sc-1764067037.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "翠意符文", number: "OGN.042a/298", price: 73, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/48-sc-1764067023.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "混沌符文", number: "OGN.166a/298", price: 71, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/116-sc-1764067066.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "暴怒之印", number: "OGN.040/298", price: 69, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/40-sc-1764067022.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "序理符文", number: "OGN.214a/298", price: 62, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/139-sc-1764067076.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "洞察之印", number: "OGN.120/298", price: 60, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/97-sc-1764067054.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "炽烈符文", number: "OGN.007a/298", price: 56, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/15-sc-1764067002.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "摧破符文", number: "OGN.126a/298", price: 54, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/100-sc-1764067055.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "亡花掠食者", number: "OGN.161/298", price: 51, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/110-sc-1764067063.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "力量之印", number: "OGN.163/298", price: 42, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/113-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "瑟提, 铁拳", number: "OGN.164a/298", price: 39, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/272-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "德莱厄斯, 崔法利", number: "OGN.027a/298", price: 31, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/28-sc-1764067005.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "瑟提, 铁拳", number: "OGN.164/298", price: 30, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/271-sc-1764067065.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "圣裁之刻", number: "OGN.244/298", price: 23, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/270-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "厄运小姐, 船长", number: "OGN.162a/298", price: 23, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/112-sc-1764067064.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "叹为观止", number: "OGN.270/298", price: 20, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/67-sc-1764067090.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "艾卡西亚暴雨", number: "OGN.248/298", price: 18, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/23-sc-1764067084.jpg~tplv-2yt7131h9y-compress.image" },
+      { name: "弹幕时间", number: "OGN.268/298", price: 9, image: "https://jihuanshe-r2-imagex.jihuanshe.com/lol/card_versions/next/63-sc-1764067089.jpg~tplv-2yt7131h9y-compress.image" }
+    ];
+
+    const formatter = new Intl.NumberFormat("zh-CN", {
+      maximumFractionDigits: 0
+    });
+
+    const catalog = document.querySelector("#catalog");
+
+    catalog.innerHTML = cards.map((card) => `
+      <article class="card">
+        <div class="image-wrap">
+          ${card.image
+            ? `<img src="${card.image}" alt="${card.name} ${card.number}" loading="lazy" referrerpolicy="no-referrer" />`
+            : `<div class="empty-image">暂无卡图</div>`}
+        </div>
+        <div class="info">
+          <h2 class="name">${card.name}</h2>
+          <div class="number">${card.number}</div>
+          <div class="price"><span>价格</span>¥${formatter.format(card.price)}</div>
+        </div>
+      </article>
+    `).join("");
+  </script>
+</body>
+</html>

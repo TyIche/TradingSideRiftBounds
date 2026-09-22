@@ -1,0 +1,14 @@
+# Local capture files can be huge and may contain private tokens/account data.
+*.har
+*.saz
+*.pcap
+*.pcapng
+
+# Fiddler/SAZ extraction output and local experiments.
+_*/
+raw/
+*.cachedata
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
