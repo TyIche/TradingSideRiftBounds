@@ -234,15 +234,12 @@
     }
 
     .price {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
+      display: grid;
+      gap: 4px;
       padding-top: 8px;
       border-top: 1px solid var(--line);
       color: var(--price);
       font-weight: 850;
-      font-size: 20px;
       letter-spacing: 0;
     }
 
@@ -250,6 +247,13 @@
       color: var(--muted);
       font-size: 12px;
       font-weight: 700;
+    }
+
+    .price strong {
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.1;
+      white-space: nowrap;
     }
 
     .compare {
@@ -333,7 +337,7 @@
   <header>
     <div>
       <h1 id="pageTitle">riftbound 중국어 카드 가격</h1>
-      <p class="count" id="subtitle">전체 가격 비교 표시 · 환율 206</p>
+      <p class="count" id="subtitle">중국어판 판매 희망가와 RND 한국어판 등록가 비교 · 환율 206</p>
     </div>
     <div class="header-tools">
       <button class="compare-toggle" id="compareToggle" type="button" aria-pressed="false">가격 차이순</button>
@@ -425,13 +429,13 @@
 
     const copy = {
       ko: {
-        subtitle: "전체 가격 비교 표시 · 환율 206",
+        subtitle: "중국어판 판매 희망가와 RND 한국어판 등록가 비교 · 환율 206",
         sortByGap: "가격 차이순",
         sortByPrice: "가격순 복원",
         language: "English",
         total: `${cards.length}장`,
-        price: "가격",
-        rnd: "RND",
+        price: "중국어판 판매 희망가",
+        rnd: "RND 한국어판 등록가",
         gap: "차액",
         unmatched: "미매칭",
         same: "동일",
@@ -445,13 +449,13 @@
         discordId: "Discord ID"
       },
       en: {
-        subtitle: "Showing all comparisons · rate 206",
+        subtitle: "Chinese card asking price vs RND Korean listing price · rate 206",
         sortByGap: "Sort by gap",
         sortByPrice: "Restore price sort",
         language: "한국어",
         total: `${cards.length} cards`,
-        price: "Price",
-        rnd: "RND",
+        price: "Chinese asking price",
+        rnd: "RND Korean listing",
         gap: "Gap",
         unmatched: "No match",
         same: "Even",
@@ -538,7 +542,7 @@
         <div class="info">
           <h2 class="name">${name}</h2>
           <div class="number">${card.number}</div>
-          <div class="price"><span>${t("price")}</span>${formatWon(card.price)}</div>
+          <div class="price"><span>${t("price")}</span><strong>${formatWon(card.price)}</strong></div>
           <div class="compare">
             <div class="compare-row"><span>${t("rnd")}</span><strong>${formatWon(card.rndPrice)}</strong></div>
             <div class="compare-row"><span>${t("gap")}</span><strong class="${gapClass(gap)}">${formatGap(gap)}</strong></div>
