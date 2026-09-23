@@ -126,6 +126,61 @@
       color: #115e59;
     }
 
+    .contact-panel {
+      margin-top: 6px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      border: 1px solid #0f766e;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(6, 78, 59, 0.12);
+    }
+
+    .contact-title {
+      color: #064e3b;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .contact-button,
+    .contact-pill {
+      min-height: 38px;
+      padding: 8px 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #99f6e4;
+      border-radius: 8px;
+      background: #f0fdfa;
+      color: #0f766e;
+      font-size: 14px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .contact-button.primary {
+      border-color: #0f766e;
+      background: #0f766e;
+      color: #ffffff;
+    }
+
+    .contact-button:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .contact-pill {
+      color: #064e3b;
+    }
+
     .catalog {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
@@ -290,6 +345,14 @@
   <aside class="rule-banner">
     <a id="ruleLink" href="https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/" target="_blank" rel="noreferrer">Ref: https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/</a>
     <p id="ruleText">규칙 420에 따라 공식 Riftbound 카드는 언어와 상관없이 덱에 함께 사용할 수 있습니다. 한국어 카드와 중국어 카드를 섞어 쓰고, 더 저렴한 중국어 카드를 고를 수 있어요.</p>
+    <div class="contact-panel" aria-label="Contact">
+      <strong class="contact-title" id="contactTitle">문의하기</strong>
+      <div class="contact-actions">
+        <a class="contact-button primary" id="discordInvite" href="https://discord.gg/d6g9cmYCSU" target="_blank" rel="noreferrer">Discord 참여</a>
+        <span class="contact-pill"><span id="discordIdLabel">Discord ID</span>&nbsp;@l1ttleprincess</span>
+        <a class="contact-button" id="emailLink" href="mailto:littleprincessrua@gmail.com">littleprincessrua@gmail.com</a>
+      </div>
+    </div>
   </aside>
 
   <main>
@@ -376,7 +439,10 @@
         lower: "낮음",
         ruleLink: "Ref: https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/",
         ruleText: "규칙 420에 따라 공식 Riftbound 카드는 언어와 상관없이 덱에 함께 사용할 수 있습니다. 한국어 카드와 중국어 카드를 섞어 쓰고, 더 저렴한 중국어 카드를 고를 수 있어요.",
-        pageTitle: "riftbound 중국어 카드 가격"
+        pageTitle: "riftbound 중국어 카드 가격",
+        contactTitle: "문의하기",
+        discordInvite: "Discord 참여",
+        discordId: "Discord ID"
       },
       en: {
         subtitle: "Showing all comparisons · rate 206",
@@ -393,7 +459,10 @@
         lower: "Lower",
         ruleLink: "Ref: https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/",
         ruleText: "Rule 420 lets official Riftbound cards of any language be used together in decks. You can mix Korean and Chinese cards, then choose lower-priced Chinese copies.",
-        pageTitle: "riftbound Chinese card prices"
+        pageTitle: "riftbound Chinese card prices",
+        contactTitle: "Contact me",
+        discordInvite: "Join Discord",
+        discordId: "Discord ID"
       }
     };
 
@@ -409,6 +478,9 @@
     const ruleLink = document.querySelector("#ruleLink");
     const ruleText = document.querySelector("#ruleText");
     const pageTitle = document.querySelector("#pageTitle");
+    const contactTitle = document.querySelector("#contactTitle");
+    const discordInvite = document.querySelector("#discordInvite");
+    const discordIdLabel = document.querySelector("#discordIdLabel");
     let sortByGap = false;
     let language = "ko";
 
@@ -434,6 +506,9 @@
       ruleText.textContent = t("ruleText");
       pageTitle.textContent = t("pageTitle");
       document.title = t("pageTitle");
+      contactTitle.textContent = t("contactTitle");
+      discordInvite.textContent = t("discordInvite");
+      discordIdLabel.textContent = t("discordId");
     };
 
     const render = () => {
