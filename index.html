@@ -58,7 +58,6 @@
       flex: 0 0 auto;
     }
 
-    .compare-toggle,
     .lang-toggle,
     .total {
       height: 40px;
@@ -72,14 +71,12 @@
       white-space: nowrap;
     }
 
-    .compare-toggle,
     .lang-toggle {
       cursor: pointer;
       color: var(--ink);
       font-weight: 750;
     }
 
-    .compare-toggle[aria-pressed="true"],
     .lang-toggle[aria-pressed="true"] {
       border-color: var(--accent);
       background: #e0f2ef;
@@ -288,40 +285,6 @@
       text-decoration-thickness: 2px;
     }
 
-    .compare {
-      display: grid;
-      gap: 5px;
-      padding-top: 8px;
-      border-top: 1px solid var(--line);
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .compare-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .compare-row strong {
-      color: var(--ink);
-      font-size: 13px;
-      font-weight: 800;
-      text-align: right;
-    }
-
-    .compare-row .higher { color: #b42318; }
-    .compare-row .lower { color: #067647; }
-    .compare-row .same { color: var(--muted); }
-
-    .rnd-name {
-      min-height: 18px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
     .empty-image {
       width: 100%;
       height: 100%;
@@ -358,7 +321,6 @@
         width: 100%;
       }
 
-      .compare-toggle,
       .lang-toggle,
       .total {
         flex: 1 1 0;
@@ -384,10 +346,9 @@
   <header>
     <div>
       <h1 id="pageTitle">riftbound 중국어 카드 가격</h1>
-      <p class="count" id="subtitle">중국어판 판매 희망가와 RND/Odoo 등록가 비교 · CNY 206 · EUR 1557</p>
+      <p class="count" id="subtitle">중국어판 판매 희망가 · CNY 206 · EUR 1557</p>
     </div>
     <div class="header-tools">
-      <button class="compare-toggle" id="compareToggle" type="button" aria-pressed="false">가격 차이순</button>
       <button class="lang-toggle" id="langToggle" type="button" aria-pressed="false">English</button>
       <div class="total" id="totalCount">60장</div>
     </div>
@@ -483,19 +444,12 @@
 
     const copy = {
       ko: {
-        subtitle: "중국어판 판매 희망가와 RND/Odoo 등록가 비교 · CNY 206 · EUR 1557",
-        sortByGap: "가격 차이순",
-        sortByPrice: "가격순 복원",
+        subtitle: "중국어판 판매 희망가 · CNY 206 · EUR 1557",
         language: "English",
         total: `${cards.length}장`,
         price: "중국어판 판매 희망가",
-        rnd: "RND 한국어판 등록가",
         odoo: "영문 사이트 Odoo 가격",
-        gap: "차액",
         unmatched: "미매칭",
-        same: "동일",
-        higher: "높음",
-        lower: "낮음",
         ruleLink: "Ref: https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/",
         ruleText: "규칙 420에 따라 공식 Riftbound 카드는 언어와 상관없이 덱에 함께 사용할 수 있습니다. 한국어 카드와 중국어 카드를 섞어 쓰고, 더 저렴한 중국어 카드를 고를 수 있어요.",
         pageTitle: "riftbound 중국어 카드 가격",
@@ -507,19 +461,12 @@
         catalogTitle: "전체 카드"
       },
       en: {
-        subtitle: "Chinese asking price vs RND/Odoo listings · CNY 206 · EUR 1557",
-        sortByGap: "Sort by gap",
-        sortByPrice: "Restore price sort",
+        subtitle: "Chinese asking prices · CNY 206 · EUR 1557",
         language: "한국어",
         total: `${cards.length} cards`,
         price: "Chinese asking price",
-        rnd: "RND Korean listing",
         odoo: "English site Odoo price",
-        gap: "Gap",
         unmatched: "No match",
-        same: "Even",
-        higher: "Higher",
-        lower: "Lower",
         ruleLink: "Ref: https://playriftbound.com/en-us/news/announcements/tournament-rules-january-update/",
         ruleText: "Rule 420 lets official Riftbound cards of any language be used together in decks. You can mix Korean and Chinese cards, then choose lower-priced Chinese copies.",
         pageTitle: "riftbound Chinese card prices",
@@ -540,7 +487,6 @@
     const catalog = document.querySelector("#catalog");
     const specialTitle = document.querySelector("#specialTitle");
     const catalogTitle = document.querySelector("#catalogTitle");
-    const compareToggle = document.querySelector("#compareToggle");
     const langToggle = document.querySelector("#langToggle");
     const subtitle = document.querySelector("#subtitle");
     const totalCount = document.querySelector("#totalCount");
@@ -550,7 +496,6 @@
     const contactTitle = document.querySelector("#contactTitle");
     const discordInvite = document.querySelector("#discordInvite");
     const discordIdLabel = document.querySelector("#discordIdLabel");
-    let sortByGap = false;
     let language = "ko";
 
     const t = (key) => copy[language][key];
@@ -565,19 +510,11 @@
       ["OGN.122/298", 5]
     ]);
     const isSpecialSale = (card) => specialSaleNumbers.has(card.number);
-    const getGap = (card) => card.rndPrice == null ? null : card.price - card.rndPrice;
-    const formatGap = (gap) => {
-      if (gap == null) return t("unmatched");
-      if (gap === 0) return t("same");
-      return `${gap > 0 ? t("higher") : t("lower")} ${formatWon(Math.abs(gap))}`;
-    };
-    const gapClass = (gap) => gap == null || gap === 0 ? "same" : gap > 0 ? "higher" : "lower";
 
     const syncChrome = () => {
       document.documentElement.lang = language;
       subtitle.textContent = t("subtitle");
       totalCount.textContent = t("total");
-      compareToggle.textContent = sortByGap ? t("sortByPrice") : t("sortByGap");
       langToggle.textContent = t("language");
       langToggle.setAttribute("aria-pressed", String(language === "en"));
       ruleLink.textContent = t("ruleLink");
@@ -591,20 +528,10 @@
       catalogTitle.textContent = t("catalogTitle");
     };
 
-    const sortCards = (items) => items.sort((a, b) => {
-      if (!sortByGap) return b.price - a.price;
-      const gapA = getGap(a);
-      const gapB = getGap(b);
-      if (gapA == null && gapB == null) return b.price - a.price;
-      if (gapA == null) return 1;
-      if (gapB == null) return -1;
-      return gapB - gapA || b.price - a.price;
-    });
+    const sortCards = (items) => items.sort((a, b) => b.price - a.price);
 
     const cardMarkup = (card) => {
-      const gap = getGap(card);
       const name = cardName(card);
-      const rndMeta = card.rndPrice == null ? t("unmatched") : name;
 
       return `
       <article class="card">
@@ -622,11 +549,6 @@
             <strong>${formatWon(card.price)}</strong>
             <div class="odoo-reference"><span>${t("odoo")}</span><s>${formatWon(card.odooPrice)}</s></div>
           </div>
-          <div class="compare">
-            <div class="compare-row"><span>${t("rnd")}</span><strong>${formatWon(card.rndPrice)}</strong></div>
-            <div class="compare-row"><span>${t("gap")}</span><strong class="${gapClass(gap)}">${formatGap(gap)}</strong></div>
-            <div class="rnd-name">${rndMeta}</div>
-          </div>
         </div>
       </article>`;
     };
@@ -641,12 +563,6 @@
       specialCatalog.innerHTML = specialCards.map(cardMarkup).join("");
       catalog.innerHTML = regularCards.map(cardMarkup).join("");
     };
-
-    compareToggle.addEventListener("click", () => {
-      sortByGap = !sortByGap;
-      compareToggle.setAttribute("aria-pressed", String(sortByGap));
-      render();
-    });
 
     langToggle.addEventListener("click", () => {
       language = language === "ko" ? "en" : "ko";
