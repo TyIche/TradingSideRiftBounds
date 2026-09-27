@@ -360,7 +360,8 @@
     <div class="contact-panel" aria-label="Contact">
       <strong class="contact-title" id="contactTitle">문의하기</strong>
       <div class="contact-actions">
-        <a class="contact-button primary" id="discordInvite" href="https://discord.gg/d6g9cmYCSU" target="_blank" rel="noreferrer">Discord 참여</a>
+        <a class="contact-button primary" id="kakaoOpenChat" href="https://open.kakao.com/o/s5q3zCPi" target="_blank" rel="noreferrer">Kakao 오픈채팅</a>
+        <a class="contact-button" id="discordInvite" href="https://discord.gg/d6g9cmYCSU" target="_blank" rel="noreferrer">Discord 참여</a>
         <span class="contact-pill"><span id="discordIdLabel">Discord ID</span>&nbsp;@l1ttleprincess</span>
         <a class="contact-button" id="emailLink" href="mailto:littleprincessrua@gmail.com">littleprincessrua@gmail.com</a>
       </div>
@@ -454,6 +455,7 @@
         ruleText: "규칙 420에 따라 공식 Riftbound 카드는 언어와 상관없이 덱에 함께 사용할 수 있습니다. 한국어 카드와 중국어 카드를 섞어 쓰고, 더 저렴한 중국어 카드를 고를 수 있어요.",
         pageTitle: "riftbound 중국어 카드 가격",
         contactTitle: "문의하기",
+        kakaoOpenChat: "Kakao 오픈채팅",
         discordInvite: "Discord 참여",
         discordId: "Discord ID",
         specialSale: "특가",
@@ -471,6 +473,7 @@
         ruleText: "Rule 420 lets official Riftbound cards of any language be used together in decks. You can mix Korean and Chinese cards, then choose lower-priced Chinese copies.",
         pageTitle: "riftbound Chinese card prices",
         contactTitle: "Contact me",
+        kakaoOpenChat: "Kakao Open Chat",
         discordInvite: "Join Discord",
         discordId: "Discord ID",
         specialSale: "Sale",
@@ -494,6 +497,7 @@
     const ruleText = document.querySelector("#ruleText");
     const pageTitle = document.querySelector("#pageTitle");
     const contactTitle = document.querySelector("#contactTitle");
+    const kakaoOpenChat = document.querySelector("#kakaoOpenChat");
     const discordInvite = document.querySelector("#discordInvite");
     const discordIdLabel = document.querySelector("#discordIdLabel");
     let language = "ko";
@@ -522,6 +526,7 @@
       pageTitle.textContent = t("pageTitle");
       document.title = t("pageTitle");
       contactTitle.textContent = t("contactTitle");
+      kakaoOpenChat.textContent = t("kakaoOpenChat");
       discordInvite.textContent = t("discordInvite");
       discordIdLabel.textContent = t("discordId");
       specialTitle.textContent = t("specialTitle");
