@@ -187,6 +187,22 @@
       gap: 16px;
     }
 
+    .catalog-section {
+      display: grid;
+      gap: 12px;
+    }
+
+    .catalog-section + .catalog-section {
+      margin-top: 30px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
     .card {
       min-width: 0;
       overflow: hidden;
@@ -391,7 +407,14 @@
   </aside>
 
   <main>
-    <section class="catalog" id="catalog" aria-label="OGN 오리진 카드"></section>
+    <section class="catalog-section" aria-labelledby="specialTitle">
+      <h2 class="section-title" id="specialTitle">특가 카드</h2>
+      <div class="catalog" id="specialCatalog" aria-label="특가 카드"></div>
+    </section>
+    <section class="catalog-section" aria-labelledby="catalogTitle">
+      <h2 class="section-title" id="catalogTitle">전체 카드</h2>
+      <div class="catalog" id="catalog" aria-label="OGN 오리진 카드"></div>
+    </section>
   </main>
 
   <script>
@@ -479,7 +502,9 @@
         contactTitle: "문의하기",
         discordInvite: "Discord 참여",
         discordId: "Discord ID",
-        specialSale: "특가"
+        specialSale: "특가",
+        specialTitle: "특가 카드",
+        catalogTitle: "전체 카드"
       },
       en: {
         subtitle: "Chinese asking price vs RND/Odoo listings · CNY 206 · EUR 1557",
@@ -501,7 +526,9 @@
         contactTitle: "Contact me",
         discordInvite: "Join Discord",
         discordId: "Discord ID",
-        specialSale: "Sale"
+        specialSale: "Sale",
+        specialTitle: "Special sale",
+        catalogTitle: "All cards"
       }
     };
 
@@ -509,7 +536,10 @@
       maximumFractionDigits: 0
     });
 
+    const specialCatalog = document.querySelector("#specialCatalog");
     const catalog = document.querySelector("#catalog");
+    const specialTitle = document.querySelector("#specialTitle");
+    const catalogTitle = document.querySelector("#catalogTitle");
     const compareToggle = document.querySelector("#compareToggle");
     const langToggle = document.querySelector("#langToggle");
     const subtitle = document.querySelector("#subtitle");
@@ -527,6 +557,13 @@
     const cardName = (card) => language === "ko" ? card.nameKo : card.nameEn;
     const formatWon = (value) => value == null ? t("unmatched") : `₩${formatter.format(value)}`;
     const specialSaleNumbers = new Set(["OGN.082/298", "OGN.161/298", "OGN.116/298", "OGN.122/298", "OGN.160/298"]);
+    const specialSaleProfitOrder = new Map([
+      ["OGN.082/298", 1],
+      ["OGN.116/298", 2],
+      ["OGN.160/298", 3],
+      ["OGN.161/298", 4],
+      ["OGN.122/298", 5]
+    ]);
     const isSpecialSale = (card) => specialSaleNumbers.has(card.number);
     const getGap = (card) => card.rndPrice == null ? null : card.price - card.rndPrice;
     const formatGap = (gap) => {
@@ -550,27 +587,26 @@
       contactTitle.textContent = t("contactTitle");
       discordInvite.textContent = t("discordInvite");
       discordIdLabel.textContent = t("discordId");
+      specialTitle.textContent = t("specialTitle");
+      catalogTitle.textContent = t("catalogTitle");
     };
 
-    const render = () => {
-      syncChrome();
-      const visibleCards = [...cards].sort((a, b) => {
-        if (isSpecialSale(a) !== isSpecialSale(b)) return isSpecialSale(a) ? -1 : 1;
-        if (!sortByGap) return b.price - a.price;
-        const gapA = getGap(a);
-        const gapB = getGap(b);
-        if (gapA == null && gapB == null) return b.price - a.price;
-        if (gapA == null) return 1;
-        if (gapB == null) return -1;
-        return gapB - gapA || b.price - a.price;
-      });
+    const sortCards = (items) => items.sort((a, b) => {
+      if (!sortByGap) return b.price - a.price;
+      const gapA = getGap(a);
+      const gapB = getGap(b);
+      if (gapA == null && gapB == null) return b.price - a.price;
+      if (gapA == null) return 1;
+      if (gapB == null) return -1;
+      return gapB - gapA || b.price - a.price;
+    });
 
-      catalog.innerHTML = visibleCards.map((card) => {
-        const gap = getGap(card);
-        const name = cardName(card);
-        const rndMeta = card.rndPrice == null ? t("unmatched") : name;
+    const cardMarkup = (card) => {
+      const gap = getGap(card);
+      const name = cardName(card);
+      const rndMeta = card.rndPrice == null ? t("unmatched") : name;
 
-        return `
+      return `
       <article class="card">
         <div class="image-wrap">
           ${isSpecialSale(card) ? `<div class="sale-badge">${t("specialSale")}</div>` : ""}
@@ -593,7 +629,17 @@
           </div>
         </div>
       </article>`;
-      }).join("");
+    };
+
+    const render = () => {
+      syncChrome();
+      const specialCards = cards
+        .filter(isSpecialSale)
+        .sort((a, b) => specialSaleProfitOrder.get(a.number) - specialSaleProfitOrder.get(b.number));
+      const regularCards = sortCards(cards.filter((card) => !isSpecialSale(card)));
+
+      specialCatalog.innerHTML = specialCards.map(cardMarkup).join("");
+      catalog.innerHTML = regularCards.map(cardMarkup).join("");
     };
 
     compareToggle.addEventListener("click", () => {
